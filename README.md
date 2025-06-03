@@ -2,6 +2,8 @@
 
 <h1>Jidhom | جِدْهُم</h1>
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/zefr0x/jidhom/main.svg)](https://results.pre-commit.ci/latest/github/zefr0x/jidhom/main)
+
 **Recruitment management system** designed to simplify the hiring process while complying with the Saudi Personal Data
 Protection Law (PDPL). This platform ensures that you won't encounter irrelevant questions or unnecessary data
 collection during the application process—**you don't even need to provide your name**. This approach promotes **equal
