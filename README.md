@@ -2,6 +2,9 @@
 
 <h1>Jidhom | جِدْهُم</h1>
 
+[![release](https://github.com/zefr0x/jidhom/actions/workflows/release.yml/badge.svg)](https://github.com/zefr0x/jidhom/actions/workflows/release.yml)
+[![test](https://github.com/zefr0x/jidhom/actions/workflows/test.yml/badge.svg)](https://github.com/zefr0x/jidhom/actions/workflows/test.yml)
+[![lint](https://github.com/zefr0x/jidhom/actions/workflows/lint.yml/badge.svg)](https://github.com/zefr0x/jidhom/actions/workflows/lint.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/zefr0x/jidhom/main.svg)](https://results.pre-commit.ci/latest/github/zefr0x/jidhom/main)
 
 **Recruitment management system** designed to simplify the hiring process while complying with the Saudi Personal Data
