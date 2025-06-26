@@ -38,7 +38,7 @@ repos:
           - id: deno-fmt
             name: deno fmt
             entry: deno fmt
-            types_or: [markdown, yaml]
+            types_or: [markdown, scss, yaml]
             language: node
             additional_dependencies: [deno]
             stages: [pre-commit]
