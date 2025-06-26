@@ -7,6 +7,16 @@ license = "AGPL-3.0-only"
 homepage = "https://github.com/zefr0x/jidhom"
 repository = "https://github.com/zefr0x/jidhom.git"
 
+[package.metadata.leptos]
+style-file = "style/main.scss"
+assets-dir = "assets"
+# TODO: Figure out end-to-end testing (use playwright or something else?)
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false
+lib-profile-release = "wasm-release"
+
 # TODO: Consider commented lints when they are stable.
 [workspace.lints.rust]
 absolute_paths_not_starting_with_crate = "deny"
@@ -135,3 +145,35 @@ use_debug = "warn"
 verbose_file_reads = "warn"
 wildcard_dependencies = "deny"
 wildcard_enum_match_arm = "warn"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+csr = ["leptos/csr", "dep:console_error_panic_hook"]
+hydrate = ["leptos/hydrate", "dep:wasm-bindgen", "dep:console_error_panic_hook"]
+ssr = ["dep:actix-files", "dep:actix-web", "dep:leptos_actix", "leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+
+[dependencies]
+actix-files = { version = "0.6", optional = true }
+actix-web = { version = "4", optional = true, features = ["macros"] }
+console_error_panic_hook = { version = "0.1", optional = true }
+http = "1.3.1"
+leptos = { version = "0.8.2", features = ["nightly"] }
+leptos_actix = { version = "0.8.2", optional = true }
+leptos_meta = "0.8.2"
+leptos_router = { version = "0.8.2", features = ["nightly"] }
+wasm-bindgen = { version = "0.2.100", optional = true }
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+panic = "abort"
+lto = true
+
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1
+panic = "abort"
