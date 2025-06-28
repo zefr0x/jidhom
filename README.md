@@ -36,6 +36,12 @@ challenges, free from clutter and focused on what truly matters.
 
 - It is an Arabic word `جِدْهُم`, means `find them`.
 
+**Q:** Why did you work on such project?
+
+1. To further familiarize myself with Rust web development, async programming, and databases.
+2. Most recruitment systems are plagued with bugs, have numerous edge cases, and collect irrelevant data. So I wanted to
+   create an effective and privacy respecting example.
+
 ## License
 
 <p>
