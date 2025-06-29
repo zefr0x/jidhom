@@ -8,7 +8,7 @@ For security issues please read [`SECURITY.md`](./SECURITY.md).
 
 ## Development
 
-- The latest `stable` [Rust](https://www.rust-lang.org/) programming language is used mainly in this project.
+- The latest `nightly` [Rust](https://www.rust-lang.org/) programming language is used mainly in this project.
 - Dependencies management is handled using [Cargo](https://doc.rust-lang.org/stable/cargo/).
 - Building and installing are handled using [Meson](https://mesonbuild.com/)
 
