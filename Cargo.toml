@@ -1,6 +1,6 @@
 [package]
 name = "jidhom"
-version = "0.1.0-alpha.0"
+version = { workspace = true }
 authors = ["zefr0x"]
 edition = "2024"
 license = "AGPL-3.0-only"
@@ -17,6 +17,13 @@ lib-features = ["hydrate"]
 lib-default-features = false
 lib-profile-release = "wasm-release"
 watch-additional-files = ["locales"]
+
+[workspace]
+members = ["migration"]
+
+[workspace.package]
+version = "0.1.0-alpha.0"
+edition = "2024"
 
 # TODO: Consider commented lints when they are stable.
 [workspace.lints.rust]
@@ -158,6 +165,8 @@ ssr = [
 	"dep:actix-web",
 	"dep:leptos_actix",
 	"dep:anyhow",
+	"dep:sea-orm",
+	"dep:dotenvy",
 	"leptos/ssr",
 	"leptos_meta/ssr",
 	"leptos_router/ssr",
@@ -170,12 +179,14 @@ actix-files = { version = "0.6", optional = true }
 actix-web = { version = "4", optional = true, features = ["macros"] }
 anyhow = { version = "1.0", optional = true }
 console_error_panic_hook = { version = "0.1", optional = true }
+dotenvy = { version = "0.15.7", optional = true }
 http = "1.3.1"
 leptos = { version = "0.8.2", features = ["nightly"] }
 leptos-fluent = { version = "0.2", features = ["nightly"] }
 leptos_actix = { version = "0.8.2", optional = true }
 leptos_meta = "0.8.2"
 leptos_router = { version = "0.8.2", features = ["nightly"] }
+sea-orm = { version = "1.1.13", optional = true, features = ["sqlx-postgres", "runtime-tokio-rustls", "macros"] }
 wasm-bindgen = { version = "0.2.100", optional = true }
 
 [profile.release]

@@ -5,9 +5,22 @@
 async fn main() -> anyhow::Result<()> {
 	use actix_files::Files;
 	use actix_web::{App, HttpServer, middleware, web};
+	use anyhow::Context;
 	use leptos::{config::get_configuration, logging::log, prelude::*};
 	use leptos_actix::{LeptosRoutes, generate_route_list};
 	use leptos_meta::MetaTags;
+
+	use jidhom::db::Connection;
+
+	// Read environment variables
+	#[cfg(debug_assertions)]
+	#[expect(unused_must_use)]
+	dotenvy::dotenv();
+
+	let database_url = std::env::var("DATABASE_URL").context("you must have `DATABASE_URL` set")?;
+
+	// Create a database connections pool
+	let database_connection = web::ThinData(Connection::new(&database_url).await?);
 
 	let conf = get_configuration(None)?;
 	let addr = conf.leptos_options.site_addr;
@@ -46,6 +59,7 @@ async fn main() -> anyhow::Result<()> {
 				}
 			})
 			.app_data(web::Data::new(leptos_options.to_owned()))
+			.app_data(database_connection.clone())
 			.wrap(middleware::Compress::default())
 	})
 	.bind(&addr)?
