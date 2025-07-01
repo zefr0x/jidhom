@@ -58,4 +58,8 @@ jobs:
               uses: Swatinem/rust-cache@v2.7.8
 
             - name: Check Lints
-              run: cargo clippy -- -D warnings
+              run: |
+                  for feature in ssr hydrate csr; do
+                      echo "Running Clippy for feature: $feature"
+                      cargo clippy --features "$feature" -- -D warnings
+                  done
