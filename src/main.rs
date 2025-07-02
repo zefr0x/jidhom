@@ -2,14 +2,14 @@
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
+async fn main() -> anyhow::Result<()> {
 	use actix_files::Files;
 	use actix_web::{App, HttpServer, middleware, web};
 	use leptos::{config::get_configuration, logging::log, prelude::*};
 	use leptos_actix::{LeptosRoutes, generate_route_list};
 	use leptos_meta::MetaTags;
 
-	let conf = get_configuration(None).unwrap();
+	let conf = get_configuration(None)?;
 	let addr = conf.leptos_options.site_addr;
 
 	HttpServer::new(move || {
@@ -50,7 +50,9 @@ async fn main() -> std::io::Result<()> {
 	})
 	.bind(&addr)?
 	.run()
-	.await
+	.await?;
+
+	Ok(())
 }
 
 // Client-side main function for e.g. usage with `trunk serve`
