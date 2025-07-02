@@ -1,8 +1,12 @@
 _default:
 	@just --list
 
-lint_all:
-	cargo clippy
+lint-all:
+	#!/usr/bin/sh
+	for feature in ssr hydrate csr
+	do
+	cargo clippy --features $feature
+	done
 	pre-commit run --all-files
 
 todo:
