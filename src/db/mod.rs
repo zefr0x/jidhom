@@ -1,6 +1,5 @@
 mod entities;
 
-use leptos::logging::log;
 use sea_orm::{Database, DatabaseConnection, DbErr};
 
 #[expect(dead_code)]
@@ -13,7 +12,7 @@ impl Connection {
 	pub async fn new(database_url: &str) -> Result<Self, DbErr> {
 		let connection = Database::connect(database_url).await?;
 
-		log!("Created connection pool for {database_url}");
+		log::info!("Connected to {database_url}");
 
 		Ok(Self { connection })
 	}

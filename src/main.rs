@@ -6,17 +6,21 @@ async fn main() -> anyhow::Result<()> {
 	use actix_files::Files;
 	use actix_web::{App, HttpServer, middleware, web};
 	use anyhow::Context;
-	use leptos::{config::get_configuration, logging::log, prelude::*};
+	use leptos::{config::get_configuration, prelude::*};
 	use leptos_actix::{LeptosRoutes, generate_route_list};
 	use leptos_meta::MetaTags;
 
 	use jidhom::db::Connection;
 
-	// Read environment variables
+	// Load `.env` file in debug builds
 	#[cfg(debug_assertions)]
 	#[expect(unused_must_use)]
 	dotenvy::dotenv();
 
+	// Initialize logger
+	env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).try_init()?;
+
+	// Load environment variables
 	let database_url = std::env::var("DATABASE_URL").context("you must have `DATABASE_URL` set")?;
 
 	// Create a database connections pool
@@ -30,8 +34,6 @@ async fn main() -> anyhow::Result<()> {
 		let routes = generate_route_list(jidhom::app::App);
 		let leptos_options = &conf.leptos_options;
 		let site_root = leptos_options.site_root.clone().to_string();
-
-		log!("listening on http://{}", &addr);
 
 		App::new()
 			// Serve JS/WASM/CSS from `pkg`
@@ -72,8 +74,7 @@ async fn main() -> anyhow::Result<()> {
 // Client-side main function for e.g. usage with `trunk serve`
 #[cfg(all(not(feature = "ssr"), feature = "csr"))]
 pub fn main() {
-	#[cfg(debug_assertions)]
-	console_error_panic_hook::set_once();
+	jidhom::init_client_logger();
 
 	leptos::mount::mount_to_body(jidhom::app::App);
 }
