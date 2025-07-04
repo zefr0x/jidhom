@@ -15,3 +15,16 @@ pub fn App() -> impl IntoView {
 		</i18n::Provider>
 	}
 }
+
+/// 404 - Not Found
+#[component]
+fn NotFound() -> impl IntoView {
+	// This can only be done during initial server-side rendering
+	#[cfg(feature = "ssr")]
+	{
+		let resp = expect_context::<leptos_actix::ResponseOptions>();
+		resp.set_status(actix_web::http::StatusCode::NOT_FOUND);
+	}
+
+	view! { <h1>"Page Not Found!"</h1> }
+}
