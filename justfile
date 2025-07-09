@@ -16,4 +16,4 @@ clean:
 	cargo clean
 
 generate-db-entities:
-	sea-orm-cli generate entity --date-time-crate time --output-dir {{justfile_directory()}}/src/db/entities/
+	sea-orm-cli generate entity --date-time-crate time --output-dir {{justfile_directory()}}/src/db/src/entities/

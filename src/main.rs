@@ -10,8 +10,6 @@ async fn main() -> anyhow::Result<()> {
 	use leptos_actix::{LeptosRoutes, generate_route_list};
 	use leptos_meta::MetaTags;
 
-	use jidhom::db::Connection;
-
 	// Load `.env` file in debug builds
 	#[cfg(debug_assertions)]
 	#[expect(unused_must_use)]
@@ -24,7 +22,7 @@ async fn main() -> anyhow::Result<()> {
 	let database_url = std::env::var("DATABASE_URL").context("you must have `DATABASE_URL` set")?;
 
 	// Create a database connections pool
-	let database_connection = web::ThinData(Connection::new(&database_url).await?);
+	let database_connection = web::ThinData(db::Connection::new(&database_url).await?);
 
 	let conf = get_configuration(None)?;
 	let addr = conf.leptos_options.site_addr;

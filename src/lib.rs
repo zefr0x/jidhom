@@ -1,6 +1,4 @@
 pub mod app;
-#[cfg(feature = "ssr")]
-pub mod db;
 mod i18n;
 mod utils;
 
