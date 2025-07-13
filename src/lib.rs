@@ -1,6 +1,5 @@
 pub mod app;
 mod i18n;
-mod utils;
 
 #[cfg(any(feature = "hydrate", feature = "csr"))]
 pub fn init_client_logger() {

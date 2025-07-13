@@ -1,0 +1,16 @@
+[package]
+name = "components"
+version = { workspace = true }
+edition = { workspace = true }
+
+[features]
+csr = ["leptos/csr"]
+hydrate = ["leptos/hydrate", "leptos-fluent/hydrate"]
+ssr = ["api/ssr", "leptos/ssr", "leptos_router/ssr", "leptos-fluent/ssr", "leptos-fluent/actix"]
+
+[dependencies]
+api = { workspace = true }
+leptos = { workspace = true }
+leptos-fluent = { workspace = true }
+leptos_router = { workspace = true }
+log = { workspace = true }
