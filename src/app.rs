@@ -1,6 +1,10 @@
 use leptos::prelude::*;
 use leptos_fluent::move_tr;
 use leptos_meta::{Link, Stylesheet, Title, provide_meta_context};
+use leptos_router::{
+	components::{Route, Router, Routes},
+	path,
+};
 
 use crate::i18n;
 
@@ -18,6 +22,16 @@ pub fn App() -> impl IntoView {
 			/>
 			<Stylesheet id="leptos" href="/pkg/jidhom.css" />
 			<Title text=move_tr!("jidhom") />
+
+			<Router>
+				<components::NavBar />
+
+				<main>
+					<Routes fallback=NotFound>
+						<Route path=path!("/") view=pages::Home />
+					</Routes>
+				</main>
+			</Router>
 		</i18n::Provider>
 	}
 }
