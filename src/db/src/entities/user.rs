@@ -10,7 +10,7 @@ pub struct Model {
 	pub id: Uuid,
 	pub r#type: UserType,
 	#[sea_orm(column_type = "Text")]
-	pub password: String,
+	pub password: crate::secret::PasswordHash,
 	pub last_login_at: TimeDateTimeWithTimeZone,
 }
 

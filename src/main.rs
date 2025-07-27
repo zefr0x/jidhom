@@ -22,7 +22,7 @@ async fn main() -> anyhow::Result<()> {
 	let database_url = std::env::var("DATABASE_URL").context("you must have `DATABASE_URL` set")?;
 
 	// Create a database connections pool
-	let database_connection = web::ThinData(db::Connection::new(&database_url).await?);
+	let database_connection = web::ThinData(db::Connection::<db::NoneState>::new(&database_url).await?);
 
 	let conf = get_configuration(None)?;
 	let addr = conf.leptos_options.site_addr;

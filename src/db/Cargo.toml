@@ -4,7 +4,15 @@ version = { workspace = true }
 edition = { workspace = true }
 
 [dependencies]
+# PERF: Enable the `parallel` feature when `e75b27d` is released.
+argon2 = { version = "0.5.3", default-features = false, features = ["std", "zeroize"] }
+base64 = "0.22.1"
+base64ct = { version = "1.8.0", features = ["std"] }
+blake3 = { version = "1.8.2", features = ["zeroize"] }
 log = { workspace = true }
+password-hash = { version = "0.5.0", default-features = false }
+rand = "0.9"
+rayon = { workspace = true }
 sea-orm = { version = "1.1.13", default-features = false, features = [
 	"sqlx-postgres",
 	"runtime-tokio-rustls",
@@ -12,3 +20,9 @@ sea-orm = { version = "1.1.13", default-features = false, features = [
 	"with-time",
 	"with-uuid",
 ] }
+secrecy = { workspace = true }
+thiserror = { workspace = true }
+time = "0.3.41"
+tokio = { workspace = true, features = ["sync"] }
+# PERF: Consider `zerocopy` feature when it becomes stable.
+uuid = { version = "1", default-features = false, features = ["rng-rand", "v4", "v7"] }

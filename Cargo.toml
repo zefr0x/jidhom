@@ -171,6 +171,10 @@ leptos_actix = "0.8.2"
 leptos_meta = "0.8.2"
 leptos_router = { version = "0.8.2", features = ["nightly"] }
 log = { version = "0.4", features = ["release_max_level_info"] }
+rayon = "1.10"
+secrecy = "0.10.3"
+thiserror = "2"
+tokio = "1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

@@ -1,19 +1,11 @@
+//! Database connection library for doing authentication and accessing storage
+mod connection;
+#[expect(unused_qualifications, reason = "Auto Generated")]
+#[expect(unused_imports, reason = "Auto Generated")]
 mod entities;
+mod error;
+mod secret;
+mod utils;
 
-use sea_orm::{Database, DatabaseConnection, DbErr};
-
-#[expect(dead_code)]
-#[derive(Clone)]
-pub struct Connection {
-	connection: DatabaseConnection,
-}
-
-impl Connection {
-	pub async fn new(database_url: &str) -> Result<Self, DbErr> {
-		let connection = Database::connect(database_url).await?;
-
-		log::info!("Connected to {database_url}");
-
-		Ok(Self { connection })
-	}
-}
+pub use connection::*;
+pub use error::StorageError;
