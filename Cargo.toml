@@ -197,6 +197,7 @@ ssr = [
 	"dep:dotenvy",
 	"dep:tracing-actix-web",
 	"dep:tracing-appender",
+	"dep:shadow-rs",
 	"leptos/ssr",
 	"leptos_meta/ssr",
 	"leptos_router/ssr",
@@ -221,6 +222,7 @@ leptos_actix = { workspace = true, optional = true }
 leptos_meta = { workspace = true }
 leptos_router = { workspace = true }
 pages = { path = "./src/pages" }
+shadow-rs = { version = "1.2.0", default-features = false, optional = true }
 tracing = { workspace = true }
 tracing-actix-web = { version = "0.7", optional = true }
 tracing-appender = { version = "0.2", optional = true }
@@ -228,6 +230,9 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "tracing"] }
 tracing-unwrap = { workspace = true }
 tracing-web = { version = "0.1.3", optional = true }
 wasm-bindgen = { version = "0.2.100", optional = true }
+
+[build-dependencies]
+shadow-rs = { version = "1.2.0" }
 
 [profile.dev]
 debug = "none"

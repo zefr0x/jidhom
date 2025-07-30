@@ -25,6 +25,29 @@ async fn main() -> anyhow::Result<()> {
 		.with_writer(non_blocking_writer)
 		.init();
 
+	{
+		// Access build metadata
+		shadow_rs::shadow!(build);
+
+		tracing::info!(
+			build.pkg.name = build::PROJECT_NAME,
+			build.pkg.version = build::PKG_VERSION,
+			build.git.clean = build::GIT_CLEAN,
+			build.git.branch = build::BRANCH,
+			build.git.last_tag = build::LAST_TAG,
+			build.git.commit.tag = build::TAG,
+			build.git.commit.hash = build::COMMIT_HASH,
+			build.git.commit.date = build::COMMIT_DATE,
+			build.git.commit.author.name = build::COMMIT_AUTHOR,
+			build.os = build::BUILD_OS,
+			build.target = build::BUILD_TARGET,
+			build.cargo.profile = build::BUILD_RUST_CHANNEL,
+			build.cargo.version = build::CARGO_VERSION,
+			build.rust.version = build::RUST_VERSION,
+			build.rust.channel = build::RUST_CHANNEL,
+		);
+	}
+
 	// Load environment variables
 	let database_url = std::env::var("DATABASE_URL").context("you must have `DATABASE_URL` set")?;
 
