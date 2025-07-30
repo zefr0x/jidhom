@@ -2,6 +2,7 @@ use leptos::prelude::*;
 use leptos_fluent::move_tr;
 use leptos_router::components::A;
 
+/// Main navigation bar (should be visible in every page)
 #[component]
 pub fn NavBar() -> impl IntoView {
 	let burger_state = RwSignal::new(false);

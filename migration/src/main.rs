@@ -1,3 +1,4 @@
+//! CLI for migrating the database
 use sea_orm_migration::prelude::*;
 
 #[tokio::main]

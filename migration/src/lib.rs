@@ -1,13 +1,16 @@
+//! Database migrations
 mod m20250714_015113_create_users_table;
 mod m20250714_220820_create_sessions_table;
 
 pub use sea_orm_migration::prelude::*;
 
+/// Database's `Migrator`
 #[derive(Debug)]
 #[non_exhaustive]
 pub struct Migrator;
 
 impl Migrator {
+	/// Create a new database `Migrator`
 	#[must_use]
 	pub const fn new() -> Self {
 		Self {}
