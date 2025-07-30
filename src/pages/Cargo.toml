@@ -14,3 +14,6 @@ leptos = { workspace = true }
 leptos-fluent = { workspace = true }
 leptos_meta = { workspace = true }
 tracing = { workspace = true }
+
+[lints]
+workspace = true

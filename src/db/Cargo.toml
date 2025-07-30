@@ -27,3 +27,6 @@ tracing = { workspace = true }
 tracing-unwrap = { workspace = true }
 # PERF: Consider `zerocopy` feature when it becomes stable.
 uuid = { version = "1", default-features = false, features = ["rng-rand", "v4", "v7"] }
+
+[lints]
+workspace = true
