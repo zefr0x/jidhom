@@ -15,8 +15,15 @@ async fn main() -> anyhow::Result<()> {
 	#[expect(unused_must_use)]
 	dotenvy::dotenv();
 
-	// Initialize logger
-	env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).try_init()?;
+	// Initialize tracing subscriber with a non-blocking writer
+	let (non_blocking_writer, _guard) = tracing_appender::non_blocking(std::io::stderr());
+	tracing_subscriber::fmt()
+		.with_span_events(
+			tracing_subscriber::fmt::format::FmtSpan::NEW | tracing_subscriber::fmt::format::FmtSpan::CLOSE,
+		)
+		.with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+		.with_writer(non_blocking_writer)
+		.init();
 
 	// Load environment variables
 	let database_url = std::env::var("DATABASE_URL").context("you must have `DATABASE_URL` set")?;
@@ -61,6 +68,39 @@ async fn main() -> anyhow::Result<()> {
 			.app_data(web::Data::new(leptos_options.to_owned()))
 			.app_data(database_connection.clone())
 			.wrap(middleware::Compress::default())
+			// A tracing span for every request
+			.wrap({
+				struct DomainRootSpanBuilder;
+
+				impl tracing_actix_web::RootSpanBuilder for DomainRootSpanBuilder {
+					fn on_request_start(request: &actix_web::dev::ServiceRequest) -> tracing::Span {
+						let root_span = tracing_actix_web::root_span!(
+							request,
+							cookie.session.id = tracing::field::Empty,
+							cookie.lang = tracing::field::Empty
+						);
+
+						// TODO: Consider that for privacy we don't need to log session.id of a request that doesn't need authorization.
+						if let Some(session_id) = request.cookie("id") {
+							root_span.record("cookie.session.id", session_id.value());
+						}
+						if let Some(lang) = request.cookie("lang") {
+							root_span.record("cookie.lang", lang.value());
+						}
+
+						root_span
+					}
+
+					fn on_request_end<B: actix_web::body::MessageBody>(
+						span: tracing::Span,
+						outcome: &Result<actix_web::dev::ServiceResponse<B>, actix_web::Error>,
+					) {
+						tracing_actix_web::DefaultRootSpanBuilder::on_request_end(span, outcome);
+					}
+				}
+
+				tracing_actix_web::TracingLogger::<DomainRootSpanBuilder>::new()
+			})
 	})
 	.bind(&addr)?
 	.run()

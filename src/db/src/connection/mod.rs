@@ -75,7 +75,7 @@ where
 	pub async fn new(database_url: &str) -> Result<Connection<NoneState>, StorageError> {
 		let connection = Database::connect(database_url).await?;
 
-		log::info!("Connected to {database_url}");
+		tracing::info!(target_database_url = database_url, "created database connection pool");
 
 		Ok(Connection {
 			connection,

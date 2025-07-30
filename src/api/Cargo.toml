@@ -4,12 +4,12 @@ version = { workspace = true }
 edition = { workspace = true }
 
 [features]
-ssr = ["dep:actix-web", "dep:db", "dep:leptos_actix", "dep:log"]
+ssr = ["dep:actix-web", "dep:db", "dep:leptos_actix", "dep:tracing"]
 
 [dependencies]
 actix-web = { workspace = true, optional = true }
 db = { workspace = true, optional = true }
 leptos = { workspace = true }
 leptos_actix = { workspace = true, optional = true }
-log = { workspace = true, optional = true }
 secrecy = { workspace = true }
+tracing = { workspace = true, optional = true }

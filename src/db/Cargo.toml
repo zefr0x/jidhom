@@ -9,7 +9,6 @@ argon2 = { version = "0.5.3", default-features = false, features = ["std", "zero
 base64 = "0.22.1"
 base64ct = { version = "1.8.0", features = ["std"] }
 blake3 = { version = "1.8.2", features = ["zeroize"] }
-log = { workspace = true }
 password-hash = { version = "0.5.0", default-features = false }
 rand = "0.9"
 rayon = { workspace = true }
@@ -24,5 +23,7 @@ secrecy = { workspace = true }
 thiserror = { workspace = true }
 time = "0.3.41"
 tokio = { workspace = true, features = ["sync"] }
+tracing = { workspace = true }
+tracing-unwrap = { workspace = true }
 # PERF: Consider `zerocopy` feature when it becomes stable.
 uuid = { version = "1", default-features = false, features = ["rng-rand", "v4", "v7"] }

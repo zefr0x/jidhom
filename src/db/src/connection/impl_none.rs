@@ -6,9 +6,10 @@ use sea_orm::{
 	DerivePartialModel, FromQueryResult, QuerySelect as _, TransactionTrait as _,
 	prelude::*,
 };
-// PERF: Consider not using SecretBox, since it is not used end-to-end and doesn't provide significant protection.
+// PERF: Consider usage of SecretBox, since doesn't provide significant end-to-end protection, but does prevent logging secrets.
 use secrecy::{ExposeSecret as _, ExposeSecretMut as _, SecretBox, SecretString};
 use time::{Duration, OffsetDateTime};
+use tracing_unwrap::OptionExt as _;
 
 use crate::{
 	StorageError,
@@ -35,6 +36,7 @@ impl Connection<NoneState> {
 	/// # Errors
 	/// - Failing to hash the password.
 	/// - Failing to communicate with the database.
+	#[tracing::instrument(skip(self), level = tracing::Level::DEBUG)]
 	pub async fn create_applicant_user(&self, user_password: SecretString) -> Result<String, StorageError> {
 		let user = user::ActiveModel {
 			id: Set(Uuid::new_v4()),
@@ -54,6 +56,7 @@ impl Connection<NoneState> {
 	/// # Errors
 	/// - Failing to parse the `user_id` as `Uuid`.
 	/// - Failing to communicate with the database.
+	#[tracing::instrument(skip(self), level = tracing::Level::DEBUG)]
 	pub async fn create_session(
 		&self,
 		user_id: &str,
@@ -88,8 +91,9 @@ impl Connection<NoneState> {
 			let secret_hash = Blake3Hash::generate(&token_b64);
 
 			// TODO: Handle session expiration with a more advanced approach (maybe dynamic expiration to an extent?).
-			#[expect(clippy::missing_panics_doc, reason = "Shouldn't panic tell the end of time")]
-			let expiration_time = OffsetDateTime::now_utc().checked_add(Duration::hours(3)).unwrap();
+			let expiration_time = OffsetDateTime::now_utc()
+				.checked_add(Duration::hours(3))
+				.unwrap_or_log();
 
 			// Session creation database transaction
 			let session_creation_transaction = self.connection.begin().await?;
@@ -131,6 +135,7 @@ impl Connection<NoneState> {
 	/// - Failing to decode and parse the session `id` as `Uuid`.
 	/// - Failing to link a valid session with an existing user.
 	/// - Failing to communicate with the database.
+	#[tracing::instrument(skip(self), level = tracing::Level::DEBUG)]
 	pub async fn load_session(self, id: &str, secret: SecretString) -> Result<LoggedIn, StorageError> {
 		let id = Uuid::from_slice(&STANDARD_NO_PAD.decode(id)?)?;
 

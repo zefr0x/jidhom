@@ -2,6 +2,7 @@ use base64ct::{Base64Unpadded, Encoding as _};
 use password_hash::PasswordHasher as _;
 use rand::{Rng as _, rng};
 use secrecy::{ExposeSecret as _, ExposeSecretMut as _, SecretString};
+use tracing_unwrap::ResultExt as _;
 
 use crate::utils::spawn_cpu_blocking;
 
@@ -11,6 +12,7 @@ pub struct PasswordHash {
 }
 
 impl PasswordHash {
+	#[tracing::instrument(level = tracing::Level::TRACE)]
 	pub async fn generate(mut password: SecretString) -> Result<Self, password_hash::Error> {
 		spawn_cpu_blocking(move || {
 			let salt: [u8; argon2::RECOMMENDED_SALT_LEN] = rng().random();
@@ -27,9 +29,10 @@ impl PasswordHash {
 			})
 		})
 		.await
-		.unwrap()
+		.unwrap_or_log()
 	}
 
+	#[tracing::instrument(level = tracing::Level::TRACE)]
 	pub async fn validate(self, mut password: SecretString) -> bool {
 		spawn_cpu_blocking(move || {
 			let algorithms: &[&dyn password_hash::PasswordVerifier] = &[&argon2::Argon2::default()];
@@ -40,7 +43,7 @@ impl PasswordHash {
 				.is_ok()
 		})
 		.await
-		.unwrap()
+		.unwrap_or_log()
 	}
 }
 
@@ -92,6 +95,7 @@ pub struct Blake3Hash {
 
 impl Blake3Hash {
 	// Using reference since tokens should be returned to the client and not dropped after hashing
+	#[tracing::instrument(level = tracing::Level::TRACE)]
 	pub async fn generate(token: &SecretString) -> Self {
 		spawn_cpu_blocking({
 			// PERF: Any way to avoid clone?
@@ -102,13 +106,14 @@ impl Blake3Hash {
 			}
 		})
 		.await
-		.unwrap()
+		.unwrap_or_log()
 	}
 
+	#[tracing::instrument(level = tracing::Level::TRACE)]
 	pub async fn validate(self, mut token: SecretString) -> bool {
 		spawn_cpu_blocking(move || self.inner == blake3::hash(token.expose_secret_mut().as_bytes()))
 			.await
-			.unwrap()
+			.unwrap_or_log()
 	}
 }
 

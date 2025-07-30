@@ -13,4 +13,4 @@ api = { workspace = true }
 leptos = { workspace = true }
 leptos-fluent = { workspace = true }
 leptos_router = { workspace = true }
-log = { workspace = true }
+tracing = { workspace = true }
