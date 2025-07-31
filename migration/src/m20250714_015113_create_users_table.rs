@@ -1,5 +1,8 @@
-use sea_orm::{EnumIter, Iterable};
-use sea_orm_migration::{prelude::*, schema::*};
+use sea_orm::{EnumIter, Iterable as _};
+use sea_orm_migration::{
+	prelude::*,
+	schema::{enumeration, pk_uuid, text, timestamp_with_time_zone},
+};
 
 #[derive(DeriveIden)]
 pub enum User {

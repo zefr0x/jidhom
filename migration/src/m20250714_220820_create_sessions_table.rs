@@ -1,4 +1,7 @@
-use sea_orm_migration::{prelude::*, schema::*};
+use sea_orm_migration::{
+	prelude::*,
+	schema::{binary_len, pk_uuid, timestamp_with_time_zone, uuid},
+};
 
 use super::m20250714_015113_create_users_table::User;
 
