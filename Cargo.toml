@@ -162,11 +162,11 @@ actix-web = { version = "4", default-features = false, features = [
 api = { path = "./src/api" }
 components = { path = "./src/components" }
 db = { path = "./src/db" }
-leptos = { version = "0.8.2", features = ["nightly", "tracing"] }
+leptos = { version = "0.8.6", features = ["nightly", "tracing"] }
 leptos-fluent = { version = "0.2", features = ["nightly", "tracing"] }
-leptos_actix = { version = "0.8.2", features = ["tracing"] }
-leptos_meta = { version = "0.8.2", features = ["tracing"] }
-leptos_router = { version = "0.8.2", features = ["nightly", "tracing"] }
+leptos_actix = { version = "0.8.5", features = ["tracing"] }
+leptos_meta = { version = "0.8.5", features = ["tracing"] }
+leptos_router = { version = "0.8.5", features = ["nightly", "tracing"] }
 rayon = "1.10"
 secrecy = "0.10.3"
 thiserror = "2"
@@ -222,7 +222,7 @@ leptos_actix = { workspace = true, optional = true }
 leptos_meta = { workspace = true }
 leptos_router = { workspace = true }
 pages = { path = "./src/pages" }
-shadow-rs = { version = "1.2.0", default-features = false, optional = true }
+shadow-rs = { version = "1.2.1", default-features = false, optional = true }
 tracing = { workspace = true }
 tracing-actix-web = { version = "0.7", optional = true }
 tracing-appender = { version = "0.2", optional = true }
@@ -232,7 +232,7 @@ tracing-web = { version = "0.1.3", optional = true }
 wasm-bindgen = { version = "0.2.100", optional = true }
 
 [build-dependencies]
-shadow-rs = { version = "1.2.0" }
+shadow-rs = { version = "1.2.1" }
 
 [profile.dev]
 debug = "none"
