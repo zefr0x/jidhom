@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 use leptos_fluent::move_tr;
-use leptos_meta::{Link, Stylesheet, Title, provide_meta_context};
+use leptos_meta::{Html, Link, Stylesheet, Title, provide_meta_context};
 use leptos_router::{
 	components::{Route, Router, Routes},
 	path,
@@ -14,12 +14,10 @@ pub fn App() -> impl IntoView {
 
 	view! {
 		<i18n::Provider>
-			<Link
-				rel="stylesheet"
-				href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
-				integrity="sha512-yh2RE0wZCVZeysGiqTwDTO/dKelCbS9bP2L94UvOFtl/FKXcNAje3Y2oBg/ZMZ3LS1sicYk4dYVGtDex75fvvA=="
-				crossorigin="anonymous"
-			/>
+			// TODO: Create a theme selector and pick the default based on the browser's preference.
+			<Html {..} data-theme="dark"/>
+			// VULN: We should compile tailwind locally or check the integrity of the source.
+			<Link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" {..} type="text/css" />
 			<Stylesheet id="leptos" href="/pkg/jidhom.css" />
 			<Title text=move_tr!("jidhom") />
 
@@ -32,6 +30,8 @@ pub fn App() -> impl IntoView {
 					</Routes>
 				</main>
 			</Router>
+
+			<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 		</i18n::Provider>
 	}
 }
