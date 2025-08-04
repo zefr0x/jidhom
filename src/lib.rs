@@ -30,5 +30,5 @@ pub fn init_client_logger() {
 pub fn hydrate() {
 	init_client_logger();
 
-	leptos::mount::hydrate_body(app::App);
+	leptos::mount::hydrate_lazy(app::App);
 }
