@@ -73,9 +73,9 @@ where
 	/// # Errors
 	/// - Failing to initialize a communication with the database.
 	pub async fn new(database_url: &str) -> Result<Connection<NoneState>, StorageError> {
-		let connection = Database::connect(database_url).await?;
+		tracing::info!(target_database_url = database_url, "creating database connection pool");
 
-		tracing::info!(target_database_url = database_url, "created database connection pool");
+		let connection = Database::connect(database_url).await?;
 
 		Ok(Connection {
 			connection,
