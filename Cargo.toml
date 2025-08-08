@@ -164,6 +164,7 @@ components = { path = "./src/components" }
 db = { path = "./src/db" }
 leptos = { version = "0.8.6", features = ["nightly", "tracing"] }
 leptos-fluent = { version = "0.2", features = ["nightly", "tracing"] }
+leptos-use = { version = "0.16.2", default-features = false }
 leptos_actix = { version = "0.8.5", features = ["tracing"] }
 leptos_meta = { version = "0.8.5", features = ["tracing"] }
 leptos_router = { version = "0.8.5", features = ["nightly", "tracing"] }

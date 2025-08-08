@@ -4,5 +4,9 @@
 #![expect(clippy::same_name_method, reason = "Leptos component macro problem")]
 
 mod home;
+mod login;
+mod register;
 
 pub use home::*;
+pub use login::*;
+pub use register::*;

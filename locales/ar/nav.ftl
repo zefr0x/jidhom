@@ -1,0 +1,2 @@
+login = لِج
+register = سَجِّل

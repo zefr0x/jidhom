@@ -2,7 +2,7 @@ use leptos::prelude::*;
 use leptos_fluent::move_tr;
 use leptos_meta::{Html, Link, Stylesheet, Title, provide_meta_context};
 use leptos_router::{
-	components::{Route, Router, Routes},
+	components::{ProtectedRoute, Route, Router, Routes},
 	path,
 };
 
@@ -11,6 +11,9 @@ use crate::i18n;
 #[component]
 pub fn App() -> impl IntoView {
 	provide_meta_context();
+
+	let client_cookies = components::utils::ClientCookies::new();
+	provide_context(client_cookies);
 
 	view! {
 		<i18n::Provider>
@@ -27,6 +30,20 @@ pub fn App() -> impl IntoView {
 				<main>
 					<Routes fallback=NotFound>
 						<Route path=path!("/") view=pages::Home />
+
+						// Those routes are disabled for active sessions
+						<ProtectedRoute
+							path=path!("/login")
+							view=pages::LogIn
+							condition=move || Some(!client_cookies.is_active_session())
+							redirect_path=|| "/"
+						/>
+						<ProtectedRoute
+							path=path!("/register")
+							view=pages::ApplicatnRegister
+							condition=move || Some(!client_cookies.is_active_session())
+							redirect_path=|| "/"
+						/>
 					</Routes>
 				</main>
 			</Router>

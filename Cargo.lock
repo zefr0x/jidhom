@@ -171,7 +171,7 @@ dependencies = [
  "bytes",
  "bytestring",
  "cfg-if",
- "cookie",
+ "cookie 0.16.2",
  "derive_more 2.0.1",
  "encoding_rs",
  "foldhash",
@@ -735,9 +735,12 @@ name = "components"
 version = "0.1.0-alpha.0"
 dependencies = [
  "api",
+ "codee",
  "leptos",
  "leptos-fluent",
+ "leptos-use",
  "leptos_router",
+ "phosphor-leptos",
  "tracing",
 ]
 
@@ -846,6 +849,17 @@ name = "cookie"
 version = "0.16.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e859cd57d0710d9e06c381b550c06e76992472a8c6d527aecd2fc673dcc231fb"
+dependencies = [
+ "percent-encoding",
+ "time",
+ "version_check",
+]
+
+[[package]]
+name = "cookie"
+version = "0.18.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ddef33a339a91ea89fb53151bd0a4689cfce27055c291dfa69945475d22c747"
 dependencies = [
  "percent-encoding",
  "time",
@@ -970,6 +984,7 @@ dependencies = [
  "ident_case",
  "proc-macro2",
  "quote",
+ "strsim",
  "syn",
 ]
 
@@ -1017,6 +1032,18 @@ dependencies = [
  "tracing",
  "tracing-unwrap",
  "uuid",
+]
+
+[[package]]
+name = "default-struct-builder"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0df63c21a4383f94bd5388564829423f35c316aed85dc4f8427aded372c7c0d"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -2077,6 +2104,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "leptos-use"
+version = "0.16.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c6eac17e7d306b4ad67158aba97c1490884ba304add4321069cb63fe0834c3b1"
+dependencies = [
+ "actix-web",
+ "cfg-if",
+ "codee",
+ "cookie 0.18.1",
+ "default-struct-builder",
+ "http 0.2.12",
+ "js-sys",
+ "lazy_static",
+ "leptos",
+ "leptos_actix",
+ "paste",
+ "send_wrapper",
+ "thiserror 2.0.12",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
 name = "leptos_actix"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2696,6 +2747,15 @@ name = "percent-encoding"
 version = "2.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
+
+[[package]]
+name = "phosphor-leptos"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c65763c7e36d6af027a0b96604ffbae96e904a0dc3b7d3cefae1b43902a694cb"
+dependencies = [
+ "leptos",
+]
 
 [[package]]
 name = "pin-project"
