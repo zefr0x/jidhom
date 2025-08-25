@@ -165,7 +165,10 @@ components = { path = "./src/components" }
 db = { path = "./src/db" }
 dotenvy = { version = "0.15.7" }
 leptos = { version = "0.8.6", features = ["nightly", "tracing"] }
-leptos-fluent = { version = "0.2", features = ["nightly", "tracing"] }
+leptos-fluent = { git = "https://github.com/mondeja/leptos-fluent.git", rev = "def9487c459964a12d28284705cead4e9a5da2d1", features = [
+	"nightly",
+	"tracing",
+] }
 leptos-use = { version = "0.16.2", default-features = false }
 leptos_actix = { version = "0.8.5", features = ["tracing"] }
 leptos_meta = { version = "0.8.5", features = ["tracing"] }
