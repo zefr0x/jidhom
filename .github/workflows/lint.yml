@@ -59,7 +59,4 @@ jobs:
 
             - name: Check Lints
               run: |
-                  for feature in ssr hydrate csr; do
-                      echo "Running Clippy for feature: $feature"
-                      cargo clippy --features "$feature" -- -D warnings
-                  done
+                  cargo clippy --workspace --all-features

@@ -44,7 +44,4 @@ jobs:
 
             - name: Run Tests
               run: |
-                  for feature in ssr hydrate csr; do
-                      echo "Running tests for feature: $feature"
-                      cargo test --target ${{ matrix.target }} --features "$feature"
-                  done
+                  cargo test --target ${{ matrix.target }} --workspace --all-features
