@@ -45,6 +45,7 @@ impl Connection<NoneState> {
 			password: Set(PasswordHash::generate(user_password).await?),
 			r#type: Set(UserType::Applicant),
 			last_login_at: Set(TimeDateTimeWithTimeZone::now_utc()),
+			to_change_password: Set(false),
 		};
 
 		// TODO: Generalize this log message for every user creation regardless of type.
