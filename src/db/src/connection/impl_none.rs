@@ -12,23 +12,11 @@ use time::{Duration, OffsetDateTime};
 use tracing_unwrap::OptionExt as _;
 
 use crate::{
-	StorageError,
+	SessionCredentials, StorageError,
 	connection::{ApplicantState, Connection, InterviewerState, LoggedIn, NoneState, RecruitmentManagerState},
 	entities::{sea_orm_active_enums::UserType, session, user},
 	secret::{Blake3Hash, PasswordHash},
 };
-
-/// Credentials generated for a session to be sent to the client
-#[derive(Debug)]
-#[non_exhaustive]
-pub struct SessionCredentials {
-	/// Session id
-	pub id: String,
-	/// Session secret token
-	pub token: SecretString,
-	/// Session expiration time
-	pub expiration_time: OffsetDateTime,
-}
 
 impl Connection<NoneState> {
 	/// Create a new applicant user account and return his ID.

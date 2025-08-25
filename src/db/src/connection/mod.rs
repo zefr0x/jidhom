@@ -1,10 +1,11 @@
+#[cfg(feature = "admin")]
+mod impl_admin;
 mod impl_applicant;
 mod impl_interviewer;
 mod impl_loggedin;
 mod impl_none;
 mod impl_recruitment_manager;
 
-pub use impl_none::SessionCredentials;
 use sea_orm::{Database, DatabaseConnection};
 
 use crate::StorageError;
@@ -19,6 +20,14 @@ pub trait LoggedInState {}
 #[non_exhaustive]
 pub struct NoneState;
 impl State for NoneState {}
+
+/// Admin connection state (should be accessible only from the admin control)
+#[derive(Debug)]
+#[non_exhaustive]
+#[cfg(feature = "admin")]
+pub struct AdminState;
+#[cfg(feature = "admin")]
+impl State for AdminState {}
 
 // LoggedIn states
 
@@ -73,13 +82,35 @@ where
 	/// # Errors
 	/// - Failing to initialize a communication with the database.
 	pub async fn new(database_url: &str) -> Result<Connection<NoneState>, StorageError> {
-		tracing::info!(target_database_url = database_url, "creating database connection pool");
+		tracing::info!(
+			target_database_url = database_url,
+			"creating `NoneState` database connection pool"
+		);
 
 		let connection = Database::connect(database_url).await?;
 
 		Ok(Connection {
 			connection,
 			state: NoneState {},
+		})
+	}
+
+	/// Create a new database connection pool for the admin.
+	///
+	/// # Errors
+	/// - Failing to initialize a communication with the database.
+	#[cfg(feature = "admin")]
+	pub async fn new_for_admin(database_url: &str) -> Result<Connection<AdminState>, StorageError> {
+		tracing::info!(
+			target_database_url = database_url,
+			"creating `AdminState` database connection pool"
+		);
+
+		let connection = Database::connect(database_url).await?;
+
+		Ok(Connection {
+			connection,
+			state: AdminState {},
 		})
 	}
 }

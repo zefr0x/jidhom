@@ -3,6 +3,9 @@ name = "db"
 version = { workspace = true }
 edition = { workspace = true }
 
+[features]
+admin = []
+
 [dependencies]
 # PERF: Enable the `parallel` feature when `e75b27d` is released.
 argon2 = { version = "0.5.3", default-features = false, features = ["std", "zeroize"] }
