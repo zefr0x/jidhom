@@ -3,10 +3,7 @@ _default:
 
 lint-all:
 	#!/usr/bin/sh
-	for feature in ssr hydrate csr
-	do
-	cargo clippy --features $feature
-	done
+	cargo clippy --workspace --all-features
 	pre-commit run --all-files
 
 todo:
