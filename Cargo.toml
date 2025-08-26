@@ -1,3 +1,5 @@
+cargo-features = ["codegen-backend"]
+
 [package]
 name = "jidhom"
 version = { workspace = true }
@@ -16,6 +18,7 @@ bin-default-features = false
 lib-features = ["hydrate"]
 lib-default-features = false
 lib-profile-release = "wasm-release"
+lib-profile-dev = "wasm-dev"
 watch-additional-files = ["locales"]
 
 [workspace]
@@ -244,6 +247,12 @@ shadow-rs = { version = "1.2.1" }
 [profile.dev]
 debug = "none"
 lto = "off"
+codegen-backend = "cranelift"
+
+# NOTE: Since `cranelift` doesn't yet support WASM, we are using `llvm`.
+[profile.wasm-dev]
+inherits = "dev"
+codegen-backend = "llvm"
 
 [profile.release]
 codegen-units = 1
