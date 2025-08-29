@@ -20,7 +20,7 @@ challenges, free from clutter and focused on what truly matters.
 
 ---
 
-[<kbd><br><b>Architecture</b><br><br></kbd>](./ARCHITECTURE.md)
+[<kbd><br><b>Deploy</b><br><br></kbd>](#deployment) [<kbd><br><b>Architecture</b><br><br></kbd>](./ARCHITECTURE.md)
 [<kbd><br><b>Contribute</b><br><br></kbd>](./CONTRIBUTING.md) [<kbd><br><b>Security</b><br><br></kbd>](./SECURITY.md)
 [<kbd><br><b>Q&A</b><br><br></kbd>](#qa)
 
@@ -29,6 +29,17 @@ challenges, free from clutter and focused on what truly matters.
 <br>
 
 </div>
+
+## Deployment
+
+Use [`podman-compose.yml`](./podman-compose.yml) to build and run a containerized image (or to learn how its done):
+
+```sh
+podman-compose up
+```
+
+> [!Note]\
+> It should also work with `Docker`?
 
 ## Q&A
 
