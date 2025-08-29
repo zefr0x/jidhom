@@ -1,0 +1,47 @@
+services:
+    app:
+        build:
+            context: .
+            containerfile: Containerfile
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db
+        environment:
+            - DATABASE_URL=postgresql://user:password@db:5432/jidhom_database # NOTE: You should change this.
+        networks:
+            - jidhom_network
+
+    migrate:
+        build:
+            context: .
+            containerfile: Containerfile
+        depends_on:
+            - db
+        environment:
+            - DATABASE_URL=postgresql://user:password@db:5432/jidhom_database # NOTE: You should change this.
+        command: >
+            sh -c "/app/migration status && /app/migration up"
+        networks:
+            - jidhom_network
+
+    db:
+        image: postgres:latest
+        restart: always
+        environment:
+            # NOTE: You should change those.
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: jidhom_database
+        ports:
+            - "5432:5432"
+        networks:
+            - jidhom_network
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+networks:
+    jidhom_network:
+
+volumes:
+    postgres_data:
