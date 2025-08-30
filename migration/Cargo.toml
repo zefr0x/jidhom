@@ -9,7 +9,7 @@ name = "migration"
 path = "src/lib.rs"
 
 [dependencies]
-async-trait = "0.1.88"
+async-trait = "0.1.89"
 tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
 
 [dependencies.sea-orm-migration]
