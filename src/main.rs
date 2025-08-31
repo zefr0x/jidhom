@@ -65,9 +65,9 @@ async fn main() -> anyhow::Result<()> {
 
 		App::new()
 			// Serve JS/WASM/CSS from `pkg`
-			.service(Files::new("/pkg", format!("{site_root}/pkg")))
+			.service(Files::new("/pkg", format!("{site_root}/pkg")).use_last_modified(false))
 			// Serve other assets from the `assets` directory
-			.service(Files::new("/assets", &site_root))
+			.service(Files::new("/assets", &site_root).use_last_modified(false))
 			.leptos_routes(routes, {
 				let leptos_options = leptos_options.clone();
 				move || {
