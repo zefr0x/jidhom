@@ -1,6 +1,8 @@
 # This Github workflow will run lints and fmt for rust on push to main or pull request open.
 
 name: lint
+permissions:
+    contents: read
 on:
     push:
         branches:

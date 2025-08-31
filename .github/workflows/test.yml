@@ -20,6 +20,8 @@ on:
 jobs:
     test:
         name: cargo-test
+        permissions:
+            contents: read
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
