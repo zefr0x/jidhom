@@ -21,7 +21,7 @@ api = { workspace = true }
 codee = "0.3.2"
 leptos = { workspace = true }
 leptos-fluent = { workspace = true }
-leptos-use = { workspace = true, features = ["use_cookie", "use_clipboard"] }
+leptos-use = { workspace = true, features = ["use_cookie", "use_clipboard", "use_preferred_dark"] }
 leptos_router = { workspace = true }
 phosphor-leptos = "0.8.0"
 tracing = { workspace = true }

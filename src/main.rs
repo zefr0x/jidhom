@@ -100,7 +100,8 @@ async fn main() -> anyhow::Result<()> {
 						let root_span = tracing_actix_web::root_span!(
 							request,
 							cookie.session.id = tracing::field::Empty,
-							cookie.lang = tracing::field::Empty
+							cookie.lang = tracing::field::Empty,
+							cookie.is_dark_theme = tracing::field::Empty,
 						);
 
 						// TODO: Consider that for privacy we don't need to log session.id of a request that doesn't need authorization.
@@ -109,6 +110,9 @@ async fn main() -> anyhow::Result<()> {
 						}
 						if let Some(lang) = request.cookie("lang") {
 							root_span.record("cookie.lang", lang.value());
+						}
+						if let Some(is_dark_theme) = request.cookie("is_dark_theme") {
+							root_span.record("cookie.is_dark_theme", is_dark_theme.value());
 						}
 
 						root_span

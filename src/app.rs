@@ -17,8 +17,7 @@ pub fn App() -> impl IntoView {
 
 	view! {
 		<i18n::Provider>
-			// TODO: Create a theme selector and pick the default based on the browser's preference.
-			<Html {..} data-theme="dark"/>
+			<Html {..} data-theme={move || if client_cookies.is_dark_theme() { "dark" } else { "light" }} />
 			// VULN: We should compile tailwind locally or check the integrity of the source.
 			<Link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" {..} type="text/css" />
 			<Stylesheet id="leptos" href="/pkg/jidhom.css" />
