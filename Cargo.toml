@@ -185,7 +185,7 @@ tracing-unwrap = { version = "1.0", features = ["log-location"] }
 crate-type = ["cdylib", "rlib"]
 
 [features]
-csr = ["leptos/csr", "dep:console_error_panic_hook", "dep:tracing-web"]
+csr = ["pages/csr", "components/csr", "leptos/csr", "dep:console_error_panic_hook", "dep:tracing-web"]
 hydrate = [
 	"leptos/hydrate",
 	"leptos-fluent/hydrate",

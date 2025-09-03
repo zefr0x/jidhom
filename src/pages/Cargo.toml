@@ -4,8 +4,8 @@ version = { workspace = true }
 edition = { workspace = true }
 
 [features]
-csr = ["leptos/csr"]
-hydrate = ["leptos/hydrate", "leptos-fluent/hydrate"]
+csr = ["components/csr", "leptos/csr"]
+hydrate = ["components/hydrate", "leptos/hydrate", "leptos-fluent/hydrate"]
 ssr = ["components/ssr", "leptos/ssr", "leptos_meta/ssr", "leptos-fluent/ssr", "leptos-fluent/actix"]
 
 [dependencies]
