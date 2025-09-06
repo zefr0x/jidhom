@@ -15,7 +15,7 @@ blake3 = { version = "1.8.2", features = ["zeroize"] }
 password-hash = { version = "0.5.0", default-features = false }
 rand = "0.9"
 rayon = { workspace = true }
-sea-orm = { version = "1.1.14", default-features = false, features = [
+sea-orm = { version = "1.1.15", default-features = false, features = [
 	"sqlx-postgres",
 	"runtime-tokio-rustls",
 	"macros",
@@ -24,7 +24,7 @@ sea-orm = { version = "1.1.14", default-features = false, features = [
 ] }
 secrecy = { workspace = true }
 thiserror = { workspace = true }
-time = "0.3.41"
+time = "0.3.43"
 tokio = { workspace = true, features = ["sync"] }
 tracing = { workspace = true }
 tracing-unwrap = { workspace = true }
