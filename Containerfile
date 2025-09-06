@@ -1,10 +1,8 @@
-FROM rustlang/rust:nightly-trixie as builder
+FROM rustlang/rust:nightly-trixie AS builder
 
-# To download cargo-leptos as binary without building it
-RUN wget https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz &&\
-tar -xvf cargo-binstall-x86_64-unknown-linux-musl.tgz &&\
-cp cargo-binstall /usr/local/cargo/bin &&\
-cargo binstall cargo-leptos -y
+# Download cargo-leptos as binary without building it
+# TODO: Figure out a way to track `cargo-leptos` for updates.
+RUN curl --proto '=https' --tlsv1.2 --location --silent --show-error --fail https://github.com/leptos-rs/cargo-leptos/releases/download/v0.2.43/cargo-leptos-installer.sh | sh
 
 WORKDIR /app
 COPY . .
@@ -15,12 +13,12 @@ RUN rustc --version
 RUN cargo fetch -vv
 
 # Build the application with its utilities
-RUN cargo leptos build --release --split -vv &&\
-cargo build --package migration --release -vv &&\
+RUN cargo leptos build --release --split -vv && \
+cargo build --package migration --release -vv && \
 cargo build --package jidhom_control --release -vv
 
 
-FROM debian:trixie-slim as runtime
+FROM debian:trixie-slim AS runtime
 
 COPY --from=builder /app/target/release/jidhom_control /app/
 COPY --from=builder /app/target/release/migration /app/
