@@ -7,6 +7,9 @@ RUN curl --proto '=https' --tlsv1.2 --location --silent --show-error --fail http
 WORKDIR /app
 COPY . .
 
+# A workaround for https://github.com/rust-lang/rustup/issues/1239
+ENV RUSTUP_PERMIT_COPY_RENAME=true
+
 # Install the required toolchain and components
 RUN rustc --version
 
