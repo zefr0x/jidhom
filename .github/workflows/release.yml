@@ -1,20 +1,138 @@
 # This Github workflow will create a new release when a version tag is pushed.
 
 name: release
-permissions:
-    "contents": "write"
 on:
     push:
         tags:
             - "v[0-9]+.[0-9]+.[0-9]+*"
+    workflow_dispatch:
+
+env:
+    REGISTRY: ghcr.io
+    REGISTRY_IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
     create-release:
-        name: create-release
+        permissions:
+            contents: write
+        if: startsWith(github.ref, 'refs/tags/')
         runs-on: ubuntu-latest
         steps:
             - name: Create Github Release
               uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 #v2.3.2
-              if: startsWith(github.ref, 'refs/tags/')
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
+
+    build-image:
+        permissions:
+            contents: read
+            packages: write
+        runs-on: ${{ matrix.runner }}
+        strategy:
+            fail-fast: false
+            matrix:
+                platform:
+                    - linux/amd64
+                    - linux/arm64
+                include:
+                    - platform: linux/amd64
+                      runner: ubuntu-24.04
+                    - platform: linux/arm64
+                      runner: ubuntu-24.04-arm
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 #v5.0.0
+
+            - name: Extract Docker Image MetaData
+              id: meta
+              uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
+              with:
+                  images: ${{ env.REGISTRY_IMAGE }}
+
+            - name: Setup Docker Buildx
+              uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 #v3.11.1
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 #v3.5.0
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build and Push By Digest
+              id: build
+              uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 #v6.18.0
+              with:
+                  context: .
+                  file: Containerfile
+                  platforms: ${{ matrix.platform }}
+                  labels: ${{ steps.meta.outputs.labels }}
+                  provenance: true
+                  sbom: true
+                  push: ${{ startsWith(github.ref, 'refs/tags/') }}
+                  outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=${{ startsWith(github.ref, 'refs/tags/') }}
+
+            - name: Export Digest
+              run: |
+                  mkdir -p ${{ runner.temp }}/digests
+                  digest="${{ steps.build.outputs.digest }}"
+                  touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+            - name: Set Platform Pair Variable
+              run: |
+                  platform=${{ matrix.platform }}
+                  echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+            - name: Upload Digest
+              uses: actions/upload-artifact@v4
+              with:
+                  name: digests-${{ env.PLATFORM_PAIR }}
+                  path: ${{ runner.temp }}/digests/*
+                  if-no-files-found: error
+                  retention-days: 1
+
+    merge-images:
+        if: startsWith(github.ref, 'refs/tags/')
+        permissions:
+            packages: write
+        runs-on: ubuntu-latest
+        needs:
+            - build-image
+        steps:
+            - name: Download digests
+              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 #v5.0.0
+              with:
+                  path: ${{ runner.temp }}/digests
+                  pattern: digests-*
+                  merge-multiple: true
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 #v3.5.0
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 #v3.11.1
+
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
+              with:
+                  images: ${{ env.REGISTRY_IMAGE }}
+                  tags: |
+                      type=ref,event=branch
+                      type=semver,pattern=v{{version}}
+                      type=semver,pattern=v{{major}}.{{minor}}
+                      type=semver,pattern=v{{major}}
+
+            - name: Create manifest list and push
+              working-directory: ${{ runner.temp }}/digests
+              run: |
+                  docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+                    $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+
+            - name: Inspect image
+              run: |
+                  docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
