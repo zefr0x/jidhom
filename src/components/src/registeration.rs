@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use leptos_fluent::move_tr;
 use leptos_use::{UseClipboardReturn, use_clipboard};
-use phosphor_leptos::{CLIPBOARD_TEXT, Icon, IconWeight, X};
+use phosphor_leptos::{CHECK_FAT, CLIPBOARD_TEXT, Icon, IconWeight, X};
 
 /// Applicant user registration widget
 #[component]
@@ -20,6 +20,7 @@ pub fn ApplicantRegisterWidget() -> impl IntoView {
 
 	let UseClipboardReturn {
 		is_supported: is_clipboard_supported,
+		copied,
 		copy,
 		..
 	} = use_clipboard();
@@ -90,7 +91,12 @@ pub fn ApplicantRegisterWidget() -> impl IntoView {
 									move |_| copy(&user_id_unwraped())
 								}
 							>
-								<i><Icon weight=IconWeight::Fill size="24px" icon=CLIPBOARD_TEXT /></i>
+								<Show
+									when=move || !copied()
+									fallback=move || view!{<i><Icon weight=IconWeight::Fill size="24px" icon=CHECK_FAT /></i>}
+								>
+									<i><Icon weight=IconWeight::Fill size="24px" icon=CLIPBOARD_TEXT /></i>
+								</Show>
 							</button>
 						</Show>
 					</label>
