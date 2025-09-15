@@ -205,6 +205,7 @@ ssr = [
 	"dep:tracing-actix-web",
 	"dep:tracing-appender",
 	"dep:shadow-rs",
+	"api/ssr",
 	"leptos/ssr",
 	"leptos_meta/ssr",
 	"leptos_router/ssr",
@@ -218,6 +219,7 @@ ssr = [
 actix-files = { version = "0.6", optional = true }
 actix-web = { workspace = true, optional = true }
 anyhow = { workspace = true, optional = true }
+api = { workspace = true }
 components = { workspace = true }
 console_error_panic_hook = { version = "0.1", optional = true }
 db = { workspace = true, optional = true }

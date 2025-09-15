@@ -12,6 +12,7 @@ db = { workspace = true, optional = true }
 leptos = { workspace = true }
 leptos_actix = { workspace = true, optional = true }
 secrecy = { workspace = true }
+serde = { version = "1", features = ["derive"] }
 tracing = { workspace = true, optional = true }
 
 [lints]

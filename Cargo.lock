@@ -365,6 +365,7 @@ dependencies = [
  "leptos",
  "leptos_actix",
  "secrecy",
+ "serde",
  "tracing",
 ]
 
@@ -1951,6 +1952,7 @@ dependencies = [
  "actix-files",
  "actix-web",
  "anyhow",
+ "api",
  "components",
  "console_error_panic_hook",
  "db",

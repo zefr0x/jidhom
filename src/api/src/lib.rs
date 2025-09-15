@@ -3,5 +3,8 @@
 #![expect(clippy::exhaustive_structs, reason = "Leptos component macro problem")]
 
 pub mod authentication;
+mod data;
 pub mod registeration;
 mod utils;
+
+pub use data::*;

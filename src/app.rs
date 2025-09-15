@@ -15,6 +15,19 @@ pub fn App() -> impl IntoView {
 	let client_cookies = components::utils::ClientCookies::new();
 	provide_context(client_cookies);
 
+	// Storing the role as a global state, not a cookie, to avoid data exposure even after session expires
+	let session_role = Resource::new(
+		move || client_cookies.is_active_session(),
+		|is_active_session| async move {
+			if is_active_session {
+				api::authentication::get_session_role().await.unwrap_or_default()
+			} else {
+				api::SessionRole::Undetermined
+			}
+		},
+	);
+	provide_context(session_role);
+
 	view! {
 		<i18n::Provider>
 			<Html {..} data-theme={move || if client_cookies.is_dark_theme() { "dark" } else { "light" }} />

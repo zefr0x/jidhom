@@ -10,6 +10,10 @@ use leptos_actix::ResponseOptions;
 #[cfg(feature = "ssr")]
 use secrecy::{ExposeSecret as _, SecretString};
 
+use crate::SessionRole;
+#[cfg(feature = "ssr")]
+use crate::utils::{get_database_connection, load_session};
+
 /// Login/creating session for any user
 #[cfg_attr(feature = "ssr", tracing::instrument(level = tracing::Level::TRACE))]
 #[server]
@@ -17,7 +21,7 @@ pub async fn create_new_session(user_id: String, user_password: String) -> Resul
 	// VULN: No password length limit validation.
 	let user_password = SecretString::from(user_password);
 
-	let con = crate::utils::get_database_connection().await?;
+	let con = get_database_connection().await?;
 
 	match con.create_session(&user_id, user_password).await {
 		Ok(Some(session)) => {
@@ -28,7 +32,7 @@ pub async fn create_new_session(user_id: String, user_password: String) -> Resul
 				header::SET_COOKIE,
 				HeaderValue::from_str(
 					&Cookie::build("id", &session.id)
-						.path("/api")
+						.path("/")
 						.expires(session.expiration_time)
 						.secure(true)
 						.http_only(true)
@@ -43,7 +47,7 @@ pub async fn create_new_session(user_id: String, user_password: String) -> Resul
 				header::SET_COOKIE,
 				HeaderValue::from_str(
 					&Cookie::build("secret", session.token.expose_secret())
-						.path("/api")
+						.path("/")
 						.expires(session.expiration_time)
 						.secure(true)
 						.http_only(true)
@@ -77,6 +81,26 @@ pub async fn create_new_session(user_id: String, user_password: String) -> Resul
 
 			Err(ServerFnError::ServerError(
 				"Failed to create session. View/enable debug logs for more details.".to_owned(),
+			))
+		}
+	}
+}
+
+#[cfg_attr(feature = "ssr", tracing::instrument(level = tracing::Level::TRACE))]
+#[server]
+pub async fn get_session_role() -> Result<SessionRole, ServerFnError> {
+	match load_session(get_database_connection().await?).await {
+		Ok(session) => Ok(match session {
+			db::LoggedIn::Applicant(_) => SessionRole::Applicant,
+			db::LoggedIn::Interviewer(_) => SessionRole::Interviewr,
+			db::LoggedIn::RecruitmentManager(_) => SessionRole::RecruitmentManager,
+			db::LoggedIn::None(_) | _ => SessionRole::Undetermined,
+		}),
+		Err(storage_error) => {
+			tracing::error!(?storage_error);
+
+			Err(ServerFnError::ServerError(
+				"Failed to get session role. View/enable debug logs for more details.".to_owned(),
 			))
 		}
 	}
