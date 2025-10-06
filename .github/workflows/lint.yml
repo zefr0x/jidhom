@@ -61,4 +61,4 @@ jobs:
 
             - name: Check Lints
               run: |
-                  cargo clippy --workspace --all-features
+                  cargo clippy --workspace --all-features -- -D warnings
