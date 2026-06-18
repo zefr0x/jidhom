@@ -8,14 +8,14 @@ admin = []
 
 [dependencies]
 # PERF: Enable the `parallel` feature when `e75b27d` is released.
-argon2 = { version = "0.5.3", default-features = false, features = ["std", "zeroize"] }
+argon2 = { version = "0.6.0-rc.8", default-features = false, features = ["alloc", "password-hash", "zeroize"] }
 base64 = "0.22.1"
-base64ct = { version = "1.8.0", features = ["std"] }
-blake3 = { version = "1.8.2", features = ["zeroize"] }
-password-hash = { version = "0.5.0", default-features = false }
-rand = "0.9"
+base64ct = { version = "1.8.3", features = ["std"] }
+blake3 = { version = "1.8.5", features = ["zeroize"] }
+password-hash = { version = "0.6.1", default-features = false, features = ["alloc", "phc"] }
+rand = "0.10"
 rayon = { workspace = true }
-sea-orm = { version = "1.1.16", default-features = false, features = [
+sea-orm = { version = "1.1.20", default-features = false, features = [
 	"sqlx-postgres",
 	"runtime-tokio-rustls",
 	"macros",
@@ -24,7 +24,7 @@ sea-orm = { version = "1.1.16", default-features = false, features = [
 ] }
 secrecy = { workspace = true }
 thiserror = { workspace = true }
-time = "0.3.44"
+time = "0.3.49"
 tokio = { workspace = true, features = ["sync"] }
 tracing = { workspace = true }
 tracing-unwrap = { workspace = true }

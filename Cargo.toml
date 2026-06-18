@@ -167,13 +167,13 @@ api = { path = "./src/api" }
 components = { path = "./src/components" }
 db = { path = "./src/db" }
 dotenvy = { version = "0.15.7" }
-leptos = { version = "0.8.10", features = ["nightly", "tracing"] }
-leptos-fluent = { version = "0.2", features = ["nightly", "tracing"] }
-leptos-use = { version = "0.16.3", default-features = false }
-leptos_actix = { version = "0.8.5", features = ["tracing"] }
-leptos_meta = { version = "0.8.5", features = ["tracing"] }
-leptos_router = { version = "0.8.8", features = ["nightly", "tracing"] }
-rayon = "1.11"
+leptos = { version = "0.8.19", features = ["nightly", "tracing"] }
+leptos-fluent = { version = "0.3", features = ["nightly", "tracing"] }
+leptos-use = { version = "0.18.3", default-features = false }
+leptos_actix = { version = "0.8.7", features = ["tracing"] }
+leptos_meta = { version = "0.8.6", features = ["tracing"] }
+leptos_router = { version = "0.8.13", features = ["nightly", "tracing"] }
+rayon = "1.12"
 secrecy = "0.10.3"
 thiserror = "2"
 tokio = { version = "1", features = ["tracing"] }
@@ -188,7 +188,6 @@ crate-type = ["cdylib", "rlib"]
 csr = ["pages/csr", "components/csr", "leptos/csr", "dep:console_error_panic_hook", "dep:tracing-web"]
 hydrate = [
 	"leptos/hydrate",
-	"leptos-fluent/hydrate",
 	"dep:wasm-bindgen",
 	"dep:console_error_panic_hook",
 	"dep:tracing-web",
@@ -224,24 +223,24 @@ components = { workspace = true }
 console_error_panic_hook = { version = "0.1", optional = true }
 db = { workspace = true, optional = true }
 dotenvy = { workspace = true, optional = true }
-http = "1.3.1"
+http = "1.4.2"
 leptos = { workspace = true }
 leptos-fluent = { workspace = true }
 leptos_actix = { workspace = true, optional = true }
 leptos_meta = { workspace = true }
 leptos_router = { workspace = true }
 pages = { path = "./src/pages" }
-shadow-rs = { version = "1.4.0", default-features = false, optional = true }
+shadow-rs = { version = "2.0.0", default-features = false, optional = true }
 tracing = { workspace = true }
 tracing-actix-web = { version = "0.7", optional = true }
 tracing-appender = { version = "0.2", optional = true }
 tracing-subscriber = { workspace = true }
 tracing-unwrap = { workspace = true }
 tracing-web = { version = "0.1.3", optional = true }
-wasm-bindgen = { version = "0.2.104", optional = true }
+wasm-bindgen = { version = "0.2.125", optional = true }
 
 [build-dependencies]
-shadow-rs = { version = "1.4.0" }
+shadow-rs = { version = "2.0.0" }
 
 [profile.dev]
 debug = "none"
