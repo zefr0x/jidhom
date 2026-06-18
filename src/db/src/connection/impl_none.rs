@@ -1,6 +1,6 @@
 use base64::{Engine as _, engine::general_purpose::STANDARD_NO_PAD};
 use base64ct::Encoding as _;
-use rand::{RngCore as _, rng};
+use rand::{Rng as _, rng};
 use sea_orm::{
 	ActiveValue::{Set, Unchanged},
 	DerivePartialModel, FromQueryResult, QuerySelect as _, TransactionTrait as _,

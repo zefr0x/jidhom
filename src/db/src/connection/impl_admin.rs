@@ -1,5 +1,5 @@
 use base64ct::Encoding as _;
-use rand::{RngCore as _, rng};
+use rand::{Rng as _, rng};
 use sea_orm::{
 	ActiveValue::{Set, Unchanged},
 	prelude::*,

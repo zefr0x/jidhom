@@ -1,6 +1,6 @@
 use base64ct::{Base64Unpadded, Encoding as _};
-use password_hash::PasswordHasher as _;
-use rand::{Rng as _, rng};
+use password_hash::{PasswordHasher, phc};
+use rand::{RngExt as _, rng};
 use secrecy::{ExposeSecret as _, ExposeSecretMut as _, SecretString};
 use tracing_unwrap::ResultExt as _;
 
@@ -8,7 +8,7 @@ use crate::utils::spawn_cpu_blocking;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PasswordHash {
-	inner: password_hash::PasswordHashString,
+	inner: phc::PasswordHash,
 }
 
 impl PasswordHash {
@@ -21,9 +21,9 @@ impl PasswordHash {
 
 			Ok(Self {
 				inner: argon2::Argon2::default()
-					.hash_password(
+					.hash_password_with_salt(
 						password.expose_secret_mut().as_bytes(),
-						password_hash::Salt::from_b64(&salt).unwrap(),
+						&phc::Salt::from_b64(&salt).unwrap(),
 					)?
 					.into(),
 			})
@@ -33,14 +33,20 @@ impl PasswordHash {
 	}
 
 	#[tracing::instrument(level = tracing::Level::TRACE)]
-	pub async fn validate(self, mut password: SecretString) -> bool {
+	pub async fn validate(self, password: SecretString) -> bool {
 		spawn_cpu_blocking(move || {
-			let algorithms: &[&dyn password_hash::PasswordVerifier] = &[&argon2::Argon2::default()];
+			let algorithms: &[&dyn password_hash::PasswordVerifier<phc::PasswordHash>] = &[&argon2::Argon2::default()];
 
-			self.inner
-				.password_hash()
-				.verify_password(algorithms, password.expose_secret_mut().as_bytes())
-				.is_ok()
+			for algorithm in algorithms {
+				if algorithm
+					.verify_password(password.expose_secret().as_bytes(), &self.inner)
+					.is_ok()
+				{
+					return true;
+				}
+			}
+
+			false
 		})
 		.await
 		.unwrap_or_log()
@@ -68,7 +74,7 @@ impl sea_orm::sea_query::ValueType for PasswordHash {
 
 	fn try_from(v: sea_orm::Value) -> Result<Self, sea_orm::sea_query::ValueTypeErr> {
 		if let sea_orm::Value::String(Some(s)) = v {
-			let hash = password_hash::PasswordHashString::new(&s);
+			let hash = phc::PasswordHash::new(&s);
 
 			hash.map_or(Err(sea_orm::sea_query::ValueTypeErr), |hash| Ok(Self { inner: hash }))
 		} else {
@@ -82,7 +88,7 @@ impl sea_orm::TryGetable for PasswordHash {
 		let v: String = String::try_get_by(res, index)?;
 
 		Ok(Self {
-			inner: password_hash::PasswordHashString::new(&v)
+			inner: phc::PasswordHash::new(&v)
 				.map_err(|err| sea_orm::TryGetError::DbErr(sea_orm::DbErr::Type(format!("{err:?}"))))?,
 		})
 	}
