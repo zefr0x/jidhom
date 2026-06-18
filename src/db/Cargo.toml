@@ -7,8 +7,12 @@ edition = { workspace = true }
 admin = []
 
 [dependencies]
-# PERF: Enable the `parallel` feature when `e75b27d` is released.
-argon2 = { version = "0.6.0-rc.8", default-features = false, features = ["alloc", "password-hash", "zeroize"] }
+argon2 = { version = "0.6.0-rc.8", default-features = false, features = [
+	"alloc",
+	"password-hash",
+	"zeroize",
+	"parallel",
+] }
 base64 = "0.22.1"
 base64ct = { version = "1.8.3", features = ["std"] }
 blake3 = { version = "1.8.5", features = ["zeroize"] }

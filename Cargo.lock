@@ -364,6 +364,7 @@ dependencies = [
  "blake2",
  "cpufeatures 0.3.0",
  "password-hash",
+ "rayon",
  "zeroize",
 ]
 
