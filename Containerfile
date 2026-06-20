@@ -2,7 +2,9 @@ FROM rustlang/rust:nightly-trixie AS builder
 
 # Download cargo-leptos as binary without building it
 # TODO: Figure out a way to track `cargo-leptos` for updates.
-RUN curl --proto '=https' --tlsv1.2 --location --silent --show-error --fail https://github.com/leptos-rs/cargo-leptos/releases/download/v0.2.43/cargo-leptos-installer.sh | sh
+RUN curl --proto '=https' --tlsv1.2 --location --silent --show-error --fail https://github.com/leptos-rs/cargo-leptos/releases/download/v0.3.6/cargo-leptos-installer.sh -o cargo-leptos-installer.sh && \
+printf "ebac4ad952e2cd43b65593ecbf25224e7a2522b4af8a79bd468c1ba29219fc486118cd94ab7fad3027ed9d80b45a48d6840566540292f308ab7a9dd2711e8119 cargo-leptos-installer.sh" | b2sum -c - && \
+sh ./cargo-leptos-installer.sh
 
 WORKDIR /app
 COPY . .
