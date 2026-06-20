@@ -1,5 +1,5 @@
 use base64ct::{Base64Unpadded, Encoding as _};
-use password_hash::{PasswordHasher, phc};
+use password_hash::{PasswordHasher as _, phc};
 use rand::{RngExt as _, rng};
 use secrecy::{ExposeSecret as _, ExposeSecretMut as _, SecretString};
 use tracing_unwrap::ResultExt as _;
@@ -20,12 +20,10 @@ impl PasswordHash {
 			let salt = Base64Unpadded::encode_string(&salt);
 
 			Ok(Self {
-				inner: argon2::Argon2::default()
-					.hash_password_with_salt(
-						password.expose_secret_mut().as_bytes(),
-						&phc::Salt::from_b64(&salt).unwrap(),
-					)?
-					.into(),
+				inner: argon2::Argon2::default().hash_password_with_salt(
+					password.expose_secret_mut().as_bytes(),
+					&phc::Salt::from_b64(&salt).unwrap(),
+				)?,
 			})
 		})
 		.await
